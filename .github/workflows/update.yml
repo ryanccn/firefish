@@ -25,9 +25,9 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         if: ${{ steps.update.outputs.updated == 'true' }}
         with:
-          title: "feat: update firefish to ${{ steps.update.outputs.rev }}"
-          body: ${{ steps.update.outputs.pr-body }}
+          title: ${{ steps.update.outputs.pr_title }}
+          body: ${{ steps.update.outputs.pr_body }}
           author: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
-          commit-message: "feat: update firefish to ${{ steps.update.outputs.rev }}"
+          commit-message: ${{ steps.update.outputs.pr_title }}
           branch: update-firefish
           reviewers: ryanccn
