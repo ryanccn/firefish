@@ -1,10 +1,8 @@
 #!/bin/bash
 set -eo pipefail
 
-ansi_cyan="\033[36m"
-ansi_dim="\033[2m"
-ansi_reset="\033[0m"
-[[ -n "$NO_COLOR" ]] && ansi_cyan="" && ansi_dim="" && ansi_reset=""
+# shellcheck source=lib.sh
+source "${BASH_SOURCE%/*}/lib.sh"
 
 log_prefix="$ansi_dim> $ansi_reset"
 
@@ -25,13 +23,16 @@ rm -rf src-update
 
 if [ "$old_rev" != "$rev" ]; then
   echo -e "${log_prefix}Updated pinned revision to ${ansi_cyan}$rev${ansi_reset}"
-  echo "updated=true" >> "$GITHUB_OUTPUT"
+  set_output updated "true"
 else
   echo -e "${log_prefix}Pinned revision ${ansi_cyan}$old_rev${ansi_reset} is up to date"
-  echo "updated=false" >> "$GITHUB_OUTPUT"
+  set_output updated "false"
 fi
 
-if [ -n "$GITHUB_OUTPUT" ]; then
-  echo "rev=$rev" >> "$GITHUB_OUTPUT"
-  echo "pr-body=$(sed "s/%REV%/$(cat rev.txt)/g" pr_template.md)" >> "$GITHUB_OUTPUT"
-fi
+pr_body="$(cat << EOF
+Updates Firefish beta to [\`$rev\`](https://gitlab.prometheus.systems/firefish/firefish/-/commit/$rev).
+EOF
+)"
+
+set_output rev "$rev"
+set_output pr_body "$pr_body"

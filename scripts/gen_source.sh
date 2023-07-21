@@ -1,10 +1,8 @@
 #!/bin/bash
 set -eo pipefail
 
-ansi_cyan="\033[36m"
-ansi_dim="\033[2m"
-ansi_reset="\033[0m"
-[[ -n "$NO_COLOR" ]] && ansi_cyan="" && ansi_dim="" && ansi_reset=""
+# shellcheck source=lib.sh
+source "${BASH_SOURCE%/*}/lib.sh"
 
 log_prefix="$ansi_dim> $ansi_reset"
 
@@ -25,3 +23,5 @@ for patch in ../patches/*.patch; do
   echo -e "${log_prefix}Applying patch ${ansi_cyan}$(basename "$patch")${ansi_reset}"
   git apply "$patch"
 done
+
+set_output rev "$rev"
