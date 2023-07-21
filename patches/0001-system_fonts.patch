@@ -1,0 +1,299 @@
+From a3e2fd0a8d3aa54df2fd8d86630ac62a0c375d09 Mon Sep 17 00:00:00 2001
+From: Ryan Cao <70191398+ryanccn@users.noreply.github.com>
+Date: Fri, 21 Jul 2023 10:12:05 +0800
+Subject: [PATCH] fix: use system fonts
+
+---
+ packages/backend/src/server/web/bios.css      | 13 +++---
+ packages/backend/src/server/web/boot.js       |  4 +-
+ packages/backend/src/server/web/cli.css       | 41 +++++++++---------
+ packages/backend/src/server/web/style.css     |  6 ++-
+ .../backend/src/server/web/views/flush.pug    |  2 +-
+ packages/backend/src/services/send-email.ts   |  8 ++--
+ packages/client/src/style.scss                | 42 ++++---------------
+ 7 files changed, 50 insertions(+), 66 deletions(-)
+
+diff --git a/packages/backend/src/server/web/bios.css b/packages/backend/src/server/web/bios.css
+index d6a1285e94..4bb35e6383 100644
+--- a/packages/backend/src/server/web/bios.css
++++ b/packages/backend/src/server/web/bios.css
+@@ -43,7 +43,9 @@ main {
+ }
+ 
+ * {
+-	font-family: BIZ UDGothic, Roboto, HelveticaNeue, Arial, sans-serif;
++	font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
++		"Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
++		"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+ }
+ #firefish_app {
+ 	display: none !important;
+@@ -82,9 +84,9 @@ button {
+ 	line-height: 40px;
+ 	color: rgb(156, 207, 216);
+ 	font-size: 16px;
+-  padding: 0 20px;
+-  margin-right: 5px;
+-  margin-left: 5px;
++	padding: 0 20px;
++	margin-right: 5px;
++	margin-left: 5px;
+ }
+ button:hover {
+ 	background: #555;
+@@ -113,7 +115,8 @@ h1 {
+ 	font-size: 32px;
+ }
+ code {
+-	font-family: Fira, FiraCode, monospace;
++	font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
++		"Liberation Mono", "Courier New", monospace !important;
+ }
+ textarea {
+ 	background-color: #444;
+diff --git a/packages/backend/src/server/web/boot.js b/packages/backend/src/server/web/boot.js
+index c8efc4824f..5ffd9c2387 100644
+--- a/packages/backend/src/server/web/boot.js
++++ b/packages/backend/src/server/web/boot.js
+@@ -181,7 +181,7 @@
+ 		errorsElement.appendChild(detailsElement);
+ 		addStyle(`
+ 		* {
+-			font-family: BIZ UDGothic, Roboto, HelveticaNeue, Arial, sans-serif;
++			font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+ 		}
+ 
+ 		#firefish_app,
+@@ -264,7 +264,7 @@
+ 		}
+ 
+ 		code {
+-			font-family: Fira, FiraCode, monospace;
++			font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+ 		}
+ 
+ 		details {
+diff --git a/packages/backend/src/server/web/cli.css b/packages/backend/src/server/web/cli.css
+index 740a2aa1a2..46c934e762 100644
+--- a/packages/backend/src/server/web/cli.css
++++ b/packages/backend/src/server/web/cli.css
+@@ -7,9 +7,9 @@ main {
+ }
+ #tl > div {
+ 	border: 1px solid #908caa;
+-  border-radius: 10px;
+-  margin: 10px;
+-  padding: 10px;
++	border-radius: 10px;
++	margin: 10px;
++	padding: 10px;
+ 	width: fit-content;
+ }
+ #tl > div > header {
+@@ -32,7 +32,9 @@ img {
+ 
+ body,
+ html {
+-	font-family: BIZ UDGothic, Roboto, HelveticaNeue, Arial, sans-serif;
++	font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
++		"Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
++		"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+ 	background-color: #191724;
+ 	color: #e0def4;
+ 	justify-content: center;
+@@ -40,18 +42,18 @@ html {
+ 	padding: 10px;
+ }
+ button {
+-	border-radius:999px;
+-	padding:0 40px;
++	border-radius: 999px;
++	padding: 0 40px;
+ 	margin-top: 1rem;
+-	border:none;
+-	cursor:pointer;
+-	margin-bottom:12px;
+-	background:linear-gradient(90deg,#9ccfd8,#31748f);
+-	line-height:50px;
+-	color:#191724;
+-	font-weight:700;
+-	font-size:20px;
+- }
++	border: none;
++	cursor: pointer;
++	margin-bottom: 12px;
++	background: linear-gradient(90deg, #9ccfd8, #31748f);
++	line-height: 50px;
++	color: #191724;
++	font-weight: 700;
++	font-size: 20px;
++}
+ button:hover {
+ 	background: rgb(156, 207, 216);
+ }
+@@ -68,7 +70,8 @@ h1 {
+ 	font-size: 32px;
+ }
+ code {
+-	font-family: Fira, FiraCode, monospace;
++	font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
++		"Liberation Mono", "Courier New", monospace !important;
+ }
+ #text {
+ 	background-color: #444;
+@@ -86,7 +89,7 @@ code {
+ }
+ 
+ @media screen and (max-width: 500px) {
+-  #text {
+-    width: 80%
+-  }
++	#text {
++		width: 80%;
++	}
+ }
+diff --git a/packages/backend/src/server/web/style.css b/packages/backend/src/server/web/style.css
+index cb99a160d9..dcd6263017 100644
+--- a/packages/backend/src/server/web/style.css
++++ b/packages/backend/src/server/web/style.css
+@@ -104,7 +104,7 @@ html {
+ 	}
+ }
+ 
+-@media(prefers-reduced-motion) {
++@media (prefers-reduced-motion) {
+ 	#splashSpinner {
+ 		display: block;
+ 	}
+@@ -122,5 +122,7 @@ html {
+ 	height: 0;
+ 	text-align: center;
+ 	padding-top: 100px;
+-	font-family: sans-serif;
++	font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
++		"Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
++		"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+ }
+diff --git a/packages/backend/src/server/web/views/flush.pug b/packages/backend/src/server/web/views/flush.pug
+index e9866587e5..0218260253 100644
+--- a/packages/backend/src/server/web/views/flush.pug
++++ b/packages/backend/src/server/web/views/flush.pug
+@@ -8,7 +8,7 @@ html
+ 		title Flush Firefish
+ 		style.
+ 			* {
+-				font-family: BIZ UDGothic, Roboto, HelveticaNeue, Arial, sans-serif;
++				font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+ 			}
+ 			body,
+ 			html {
+diff --git a/packages/backend/src/services/send-email.ts b/packages/backend/src/services/send-email.ts
+index 0703865881..4f69fb9c13 100644
+--- a/packages/backend/src/services/send-email.ts
++++ b/packages/backend/src/services/send-email.ts
+@@ -9,7 +9,7 @@ export async function sendEmail(
+ 	to: string,
+ 	subject: string,
+ 	html: string,
+-	text: string,
++	text: string
+ ) {
+ 	const meta = await fetchMeta(true);
+ 
+@@ -44,10 +44,12 @@ export async function sendEmail(
+ 		<meta charset="utf-8">
+ 		<title>${subject}</title>
+ 	</head>
+-	<body style="background: #191724; padding: 16px; margin: 0; font-family: sans-serif; font-size: 14px;">
++	<body style="background: #191724; padding: 16px; margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; font-size: 14px;">
+ 		<main style="max-width: 500px; margin: 0 auto; background: #1f1d2e; color: #e0def4; border-radius: 20px;">
+ 			<header style="padding: 32px; background: #31748f; color: #e0def4; display: flex; border-radius: 20px;">
+-				<img src="${meta.logoImageUrl || meta.iconUrl || iconUrl}" style="max-width: 128px; max-height: 72px; vertical-align: bottom; margin-right: 16px;"/>
++				<img src="${
++					meta.logoImageUrl || meta.iconUrl || iconUrl
++				}" style="max-width: 128px; max-height: 72px; vertical-align: bottom; margin-right: 16px;"/>
+ 				<h1 style="margin: 0 0 1em 0;">${meta.name}</h1>
+ 			</header>
+ 			<article style="padding: 32px;">
+diff --git a/packages/client/src/style.scss b/packages/client/src/style.scss
+index 0b38d94c0d..0a535db066 100644
+--- a/packages/client/src/style.scss
++++ b/packages/client/src/style.scss
+@@ -39,33 +39,16 @@ html {
+ 	accent-color: var(--accent);
+ 	overflow: auto;
+ 	overflow-wrap: break-word;
+-	font-family: Roboto, HelveticaNeue, Arial, sans-serif;
++	font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
++		"Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
++		"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
++		"Noto Color Emoji";
+ 	font-size: 14px;
+ 	line-height: 1.6;
+ 	text-size-adjust: 100%;
+ 	tab-size: 2;
+ 	scroll-padding: 60px;
+ 	overflow-x: clip;
+-
+-	&.useCJKFont {
+-		font-family: "Hiragino Maru Gothic Pro", "BIZ UDGothic", Roboto,
+-			HelveticaNeue, Arial, sans-serif;
+-	}
+-
+-	&.useSystemFont {
+-		font-family:
+-			system-ui,
+-			-apple-system,
+-			BlinkMacSystemFont,
+-			"Segoe UI",
+-			Roboto,
+-			Oxygen,
+-			Ubuntu,
+-			Cantarell,
+-			"Open Sans",
+-			"Helvetica Neue",
+-			sans-serif;
+-	}
+ }
+ * {
+ 	scrollbar-color: var(--scrollbarHandle) transparent;
+@@ -113,9 +96,7 @@ html._themeChanging_ {
+ 	*,
+ 	::before,
+ 	::after {
+-		transition:
+-			background 1s ease,
+-			border 1s ease !important;
++		transition: background 1s ease, border 1s ease !important;
+ 	}
+ }
+ 
+@@ -668,13 +649,8 @@ hr {
+ }
+ 
+ ._monospace {
+-	font-family:
+-		Fira code,
+-		Fira Mono,
+-		Consolas,
+-		Menlo,
+-		Courier,
+-		monospace !important;
++	font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
++		"Liberation Mono", "Courier New", monospace !important;
+ }
+ 
+ ._code {
+@@ -721,9 +697,7 @@ hr {
+ 
+ .zoom-enter-active,
+ .zoom-leave-active {
+-	transition:
+-		opacity 0.5s,
+-		transform 0.5s !important;
++	transition: opacity 0.5s, transform 0.5s !important;
+ }
+ .zoom-enter-from,
+ .zoom-leave-to {
+-- 
+2.41.0
