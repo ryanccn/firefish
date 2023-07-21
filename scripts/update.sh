@@ -1,4 +1,7 @@
-#!/bin/bash
+#! /usr/bin/env nix-shell
+#! nix-shell -i bash -p bash coreutils openssl curl jq
+# shellcheck shell=bash
+
 set -eo pipefail
 
 # shellcheck source=lib.sh
