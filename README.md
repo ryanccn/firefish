@@ -2,7 +2,7 @@
 
 This is my personal fork of [Firefish](https://joinfirefish.org/).
 
-Sources are cloned directly from the upstream [GitLab repository](https://gitlab.prometheus.systems/firefish/firefish)'s `beta` branch and have patches from the `patches` folder applied.
+Sources are cloned directly from the upstream [GitLab repository](https://gitlab.prometheus.systems/firefish/firefish)'s `main` (stable) branch and have patches from the `patches` folder applied.
 
 The revision is pinned in `rev.txt` and automatically updated by GitHub Actions.
 

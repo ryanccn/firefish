@@ -15,7 +15,7 @@ old_rev="$(cat rev.txt)"
 
 echo -e "${log_prefix}Fetching ${ansi_cyan}latest revision${ansi_reset} from GitLab API..."
 
-commit_data="$(curl -fsSL "https://gitlab.prometheus.systems/api/v4/projects/30/repository/commits?ref_name=beta" | jq '.[0]')"
+commit_data="$(curl -fsSL "https://gitlab.prometheus.systems/api/v4/projects/30/repository/commits?ref_name=main" | jq '.[0]')"
 
 rev="$(echo "$commit_data" | jq -r '.id')"
 short_rev="$(echo "$commit_data" | jq -r '.short_id')"
