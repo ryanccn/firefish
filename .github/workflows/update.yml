@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   update:
@@ -26,4 +27,5 @@ jobs:
           title: "feat: update firefish to ${{ steps.update.outputs.rev }}"
           body: ${{ steps.update.outputs.pr-body }}
           commit-message: "feat: update firefish to ${{ steps.update.outputs.rev }}"
+          branch: update-firefish
           reviewers: ryanccn
