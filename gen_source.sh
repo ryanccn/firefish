@@ -10,12 +10,15 @@ ansi_reset="\033[0m"
 
 clone_url="https://gitlab.prometheus.systems/firefish/firefish.git"
 
-echo -e "Cloning ${ansi_cyan}firefish#beta${ansi_reset}"
+echo -ne "Cloning ${ansi_cyan}firefish#beta${ansi_reset}... "
 
 git clone "$clone_url" --depth 1 --branch beta --single-branch src &> /dev/null
 cd src
 
+echo -e "${ansi_green}done${ansi_reset}"
+
 for patch in ../patches/*.patch; do
-  echo -e "Applying patch ${ansi_green}$(basename "$patch")${ansi_reset}"
+  echo -ne "Applying patch ${ansi_cyan}$(basename "$patch")${ansi_reset}... "
   git apply "$patch"
+  echo -e "${ansi_green}done${ansi_reset}"
 done
