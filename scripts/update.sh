@@ -15,7 +15,7 @@ old_rev="$(cat rev.txt)"
 
 echo -e "${log_prefix}Fetching ${ansi_cyan}latest revision${ansi_reset} from GitLab API..."
 
-commit_data="$(curl -fsSL "https://gitlab.prometheus.systems/api/v4/projects/30/repository/commits?ref_name=main" | jq '.[0]')"
+commit_data="$(curl -fsSL "https://git.joinfirefish.org/api/v4/projects/7/repository/commits?ref_name=main" | jq '.[0]')"
 
 rev="$(echo "$commit_data" | jq -r '.id')"
 short_rev="$(echo "$commit_data" | jq -r '.short_id')"
@@ -24,10 +24,10 @@ message="$(echo "$commit_data" | jq -r '.title')"
 echo "$rev" > rev.txt
 
 if [ "$old_rev" != "$rev" ]; then
-  echo -e "${log_prefix}Updated pinned revision to $ansi_cyan$short_rev$ansi_reset ($message)"
+  echo -e "${log_prefix}Updated pinned revision to $ansi_cyan$short_rev$ansi_reset $ansi_dim$message$ansi_reset"
   set_output updated "true"
 else
-  echo -e "${log_prefix}Pinned revision $ansi_cyan$old_rev$ansi_reset ($message) is up to date"
+  echo -e "${log_prefix}Pinned revision $ansi_cyan$old_rev$ansi_reset $ansi_dim$message$ansi_reset is up to date"
   set_output updated "false"
 fi
 

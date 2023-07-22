@@ -17,7 +17,7 @@ echo -e "${log_prefix}Cloning ${ansi_cyan}firefish#${rev}${ansi_reset}..."
 
 mkdir src && cd src
 git init
-git remote add origin "https://gitlab.prometheus.systems/firefish/firefish.git"
+git remote add origin "https://git.joinfirefish.org/firefish/firefish.git"
 git fetch origin "$rev" --depth 1
 git reset --hard FETCH_HEAD
 
