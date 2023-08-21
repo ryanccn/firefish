@@ -33,7 +33,7 @@ fi
 
 pr_title="feat: update Firefish to \`$short_rev\`"
 pr_body="$(cat << EOF
-Updates Firefish beta to [$message (\`$short_rev\`)](https://gitlab.prometheus.systems/firefish/firefish/-/commit/$rev).
+Updates Firefish to [$message (\`$short_rev\`)](https://git.joinfirefish.org/firefish/firefish/-/commit/$rev).
 EOF
 )"
 
