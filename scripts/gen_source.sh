@@ -1,6 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p bash coreutils openssl git sd jq
-# shellcheck shell=bash
+#  shellcheck shell=bash
 
 set -eo pipefail
 
@@ -24,6 +24,7 @@ git reset --hard FETCH_HEAD
 for patch in ../patches/*.patch; do
   echo -e "${log_prefix}Applying patch ${ansi_cyan}$(basename "$patch")${ansi_reset}"
   git apply "$patch"
+  git commit --all -m "apply patch $(basename "$patch")"
 done
 
 patched_version="$(jq -r '.version' < package.json)-ryan.1"
