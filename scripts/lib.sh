@@ -1,12 +1,12 @@
-# shellcheck shell=bash
+# shellcheck shell=dash
 
 export ansi_cyan="\033[36m"
 export ansi_dim="\033[2m"
 export ansi_reset="\033[0m"
-[[ -n "$NO_COLOR" ]] && export ansi_cyan="" && export ansi_dim="" && export ansi_reset=""
+[ -n "${NO_COLOR:-}" ] && export ansi_cyan="" && export ansi_dim="" && export ansi_reset=""
 
-function set_output() {
-  [ -z "$GITHUB_OUTPUT" ] && return
+set_output() {
+  [ -z "${GITHUB_OUTPUT:-}" ] && return
 
   name="$1"
   value="$2"

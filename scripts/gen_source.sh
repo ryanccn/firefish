@@ -1,11 +1,11 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p bash coreutils openssl git sd jq
-#  shellcheck shell=bash
+#! nix-shell -i dash -p dash coreutils openssl git sd jq
+#  shellcheck shell=dash
 
-set -eo pipefail
+set -eu
 
 # shellcheck source=lib.sh
-source "${BASH_SOURCE%/*}/lib.sh"
+. "$(dirname "$(readlink -f "$0")")/lib.sh"
 
 log_prefix="$ansi_dim> $ansi_reset"
 
@@ -13,7 +13,7 @@ log_prefix="$ansi_dim> $ansi_reset"
 
 rev="$(cat rev.txt)"
 
-echo -e "${log_prefix}Cloning ${ansi_cyan}firefish#${rev}${ansi_reset}..."
+echo "${log_prefix}Cloning ${ansi_cyan}firefish#${rev}${ansi_reset}..."
 
 mkdir src && cd src
 git init
@@ -22,13 +22,13 @@ git fetch origin "$rev" --depth 1
 git reset --hard FETCH_HEAD
 
 for patch in ../patches/*.patch; do
-  echo -e "${log_prefix}Applying patch ${ansi_cyan}$(basename "$patch")${ansi_reset}"
+  echo "${log_prefix}Applying patch ${ansi_cyan}$(basename "$patch")${ansi_reset}"
   git apply "$patch"
   git commit --all -m "apply patch $(basename "$patch")"
 done
 
 patched_version="$(jq -r '.version' < package.json)-ryan.1"
-echo -e "${log_prefix}Patching version to $ansi_cyan$patched_version$ansi_reset"
+echo "${log_prefix}Patching version to $ansi_cyan$patched_version$ansi_reset"
 # shellcheck disable=SC2016
 sd '("version": ")(.*)(",)' '$1$2-ryan.1$3' package.json
 
