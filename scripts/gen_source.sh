@@ -16,15 +16,22 @@ rev="$(cat rev.txt)"
 echo "${log_prefix}Cloning ${ansi_cyan}firefish#${rev}${ansi_reset}..."
 
 mkdir src && cd src
+git config --global init.defaultBranch main
 git init
+
+git config user.name "github-actions[bot]"
+git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
 git remote add origin "https://git.joinfirefish.org/firefish/firefish.git"
 git fetch origin "$rev" --depth 1
 git reset --hard FETCH_HEAD
 
 for patch in ../patches/*.patch; do
-  echo "${log_prefix}Applying patch ${ansi_cyan}$(basename "$patch")${ansi_reset}"
+  patch_name="$(basename "$patch")"
+  echo "${log_prefix}Applying patch $ansi_cyan$patch_name$ansi_reset"
   git apply "$patch"
-  git commit --all -m "apply patch $(basename "$patch")"
+  git add .
+  git commit -m "apply patch $patch_name"
 done
 
 patched_version="$(jq -r '.version' < package.json)-ryan.1"
