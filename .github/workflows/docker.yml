@@ -20,16 +20,14 @@ jobs:
       matrix:
         platform:
           - linux/amd64
-          # - linux/arm64
+          - linux/arm64
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Install Nix
-        uses: cachix/install-nix-action@v22
-        with:
-          nix_path: nixpkgs=channel:nixos-unstable
+        uses: DeterminateSystems/nix-installer-action@v4
 
       - name: Generate source
         run: ./scripts/gen_source.sh
