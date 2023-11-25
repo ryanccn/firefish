@@ -1,34 +1,37 @@
-From a3e2fd0a8d3aa54df2fd8d86630ac62a0c375d09 Mon Sep 17 00:00:00 2001
-From: Ryan Cao <70191398+ryanccn@users.noreply.github.com>
-Date: Fri, 21 Jul 2023 10:12:05 +0800
-Subject: [PATCH] fix: use system fonts
+From 5b1ad1e82068a37fee50d99ebcfacbb978aff19a Mon Sep 17 00:00:00 2001
+From: "github-actions[bot]"
+ <41898282+github-actions[bot]@users.noreply.github.com>
+Date: Fri, 24 Nov 2023 22:58:17 +0800
+Subject: [PATCH] feat: use IBM Plex Sans for global font
 
 ---
- packages/backend/src/server/web/bios.css      | 13 +++---
+ packages/backend/src/server/web/bios.css      | 14 ++++---
  packages/backend/src/server/web/boot.js       |  4 +-
- packages/backend/src/server/web/cli.css       | 41 +++++++++---------
- packages/backend/src/server/web/style.css     |  6 ++-
+ packages/backend/src/server/web/cli.css       | 42 ++++++++++---------
+ packages/backend/src/server/web/style.css     |  7 +++-
+ .../backend/src/server/web/views/base.pug     |  2 +
  .../backend/src/server/web/views/flush.pug    |  2 +-
  packages/backend/src/services/send-email.ts   |  8 ++--
  packages/client/src/style.scss                | 42 ++++---------------
- 7 files changed, 50 insertions(+), 66 deletions(-)
+ 8 files changed, 55 insertions(+), 66 deletions(-)
 
 diff --git a/packages/backend/src/server/web/bios.css b/packages/backend/src/server/web/bios.css
-index d6a1285e94..4bb35e6383 100644
+index d6a1285..1409752 100644
 --- a/packages/backend/src/server/web/bios.css
 +++ b/packages/backend/src/server/web/bios.css
-@@ -43,7 +43,9 @@ main {
+@@ -43,7 +43,10 @@ main {
  }
  
  * {
 -	font-family: BIZ UDGothic, Roboto, HelveticaNeue, Arial, sans-serif;
-+	font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-+		"Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
-+		"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
++	font-family: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system,
++		BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
++		sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
++		"Noto Color Emoji";
  }
  #firefish_app {
  	display: none !important;
-@@ -82,9 +84,9 @@ button {
+@@ -82,9 +85,9 @@ button {
  	line-height: 40px;
  	color: rgb(156, 207, 216);
  	font-size: 16px;
@@ -41,7 +44,7 @@ index d6a1285e94..4bb35e6383 100644
  }
  button:hover {
  	background: #555;
-@@ -113,7 +115,8 @@ h1 {
+@@ -113,7 +116,8 @@ h1 {
  	font-size: 32px;
  }
  code {
@@ -52,7 +55,7 @@ index d6a1285e94..4bb35e6383 100644
  textarea {
  	background-color: #444;
 diff --git a/packages/backend/src/server/web/boot.js b/packages/backend/src/server/web/boot.js
-index c8efc4824f..5ffd9c2387 100644
+index c8efc48..5ffd9c2 100644
 --- a/packages/backend/src/server/web/boot.js
 +++ b/packages/backend/src/server/web/boot.js
 @@ -181,7 +181,7 @@
@@ -74,7 +77,7 @@ index c8efc4824f..5ffd9c2387 100644
  
  		details {
 diff --git a/packages/backend/src/server/web/cli.css b/packages/backend/src/server/web/cli.css
-index 740a2aa1a2..46c934e762 100644
+index 740a2aa..5d3f6e5 100644
 --- a/packages/backend/src/server/web/cli.css
 +++ b/packages/backend/src/server/web/cli.css
 @@ -7,9 +7,9 @@ main {
@@ -90,18 +93,19 @@ index 740a2aa1a2..46c934e762 100644
  	width: fit-content;
  }
  #tl > div > header {
-@@ -32,7 +32,9 @@ img {
+@@ -32,7 +32,10 @@ img {
  
  body,
  html {
 -	font-family: BIZ UDGothic, Roboto, HelveticaNeue, Arial, sans-serif;
-+	font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-+		"Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
-+		"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
++	font-family: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system,
++		BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
++		sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
++		"Noto Color Emoji";
  	background-color: #191724;
  	color: #e0def4;
  	justify-content: center;
-@@ -40,18 +42,18 @@ html {
+@@ -40,18 +43,18 @@ html {
  	padding: 10px;
  }
  button {
@@ -131,7 +135,7 @@ index 740a2aa1a2..46c934e762 100644
  button:hover {
  	background: rgb(156, 207, 216);
  }
-@@ -68,7 +70,8 @@ h1 {
+@@ -68,7 +71,8 @@ h1 {
  	font-size: 32px;
  }
  code {
@@ -141,7 +145,7 @@ index 740a2aa1a2..46c934e762 100644
  }
  #text {
  	background-color: #444;
-@@ -86,7 +89,7 @@ code {
+@@ -86,7 +90,7 @@ code {
  }
  
  @media screen and (max-width: 500px) {
@@ -153,7 +157,7 @@ index 740a2aa1a2..46c934e762 100644
 +	}
  }
 diff --git a/packages/backend/src/server/web/style.css b/packages/backend/src/server/web/style.css
-index cb99a160d9..dcd6263017 100644
+index cb99a16..0657fe6 100644
 --- a/packages/backend/src/server/web/style.css
 +++ b/packages/backend/src/server/web/style.css
 @@ -104,7 +104,7 @@ html {
@@ -165,17 +169,31 @@ index cb99a160d9..dcd6263017 100644
  	#splashSpinner {
  		display: block;
  	}
-@@ -122,5 +122,7 @@ html {
+@@ -122,5 +122,8 @@ html {
  	height: 0;
  	text-align: center;
  	padding-top: 100px;
 -	font-family: sans-serif;
-+	font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-+		"Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
-+		"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
++	font-family: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system,
++		BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
++		sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
++		"Noto Color Emoji";
  }
+diff --git a/packages/backend/src/server/web/views/base.pug b/packages/backend/src/server/web/views/base.pug
+index ee8bdc7..c11691d 100644
+--- a/packages/backend/src/server/web/views/base.pug
++++ b/packages/backend/src/server/web/views/base.pug
+@@ -39,6 +39,8 @@ html
+ 		link(rel='prefetch' href=`/static-assets/badges/info.png?${ timestamp }`)
+ 		link(rel='prefetch' href=`/static-assets/badges/not-found.png?${ timestamp }`)
+ 		link(rel='prefetch' href=`/static-assets/badges/error.png?${ timestamp }`)
++		link(rel='preconnect' href='https://fonts.bunny.net')
++		link(rel='stylesheet' href='https://fonts.bunny.net/css?family=ibm-plex-sans:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i')
+ 		link(rel='stylesheet' href=`/static-assets/instance.css?${ timestamp }`)
+ 		link(rel='modulepreload' href=`/assets/${clientEntry.file}`)
+ 
 diff --git a/packages/backend/src/server/web/views/flush.pug b/packages/backend/src/server/web/views/flush.pug
-index e9866587e5..0218260253 100644
+index e986658..0218260 100644
 --- a/packages/backend/src/server/web/views/flush.pug
 +++ b/packages/backend/src/server/web/views/flush.pug
 @@ -8,7 +8,7 @@ html
@@ -188,7 +206,7 @@ index e9866587e5..0218260253 100644
  			body,
  			html {
 diff --git a/packages/backend/src/services/send-email.ts b/packages/backend/src/services/send-email.ts
-index 0703865881..4f69fb9c13 100644
+index 0703865..4f69fb9 100644
 --- a/packages/backend/src/services/send-email.ts
 +++ b/packages/backend/src/services/send-email.ts
 @@ -9,7 +9,7 @@ export async function sendEmail(
@@ -216,7 +234,7 @@ index 0703865881..4f69fb9c13 100644
  			</header>
  			<article style="padding: 32px;">
 diff --git a/packages/client/src/style.scss b/packages/client/src/style.scss
-index 0b38d94c0d..0a535db066 100644
+index 0b38d94..62fb151 100644
 --- a/packages/client/src/style.scss
 +++ b/packages/client/src/style.scss
 @@ -39,33 +39,16 @@ html {
@@ -224,7 +242,7 @@ index 0b38d94c0d..0a535db066 100644
  	overflow: auto;
  	overflow-wrap: break-word;
 -	font-family: Roboto, HelveticaNeue, Arial, sans-serif;
-+	font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
++	font-family: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
 +		"Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
 +		"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
 +		"Noto Color Emoji";
@@ -296,4 +314,5 @@ index 0b38d94c0d..0a535db066 100644
  .zoom-enter-from,
  .zoom-leave-to {
 -- 
-2.41.0
+2.42.0
+
