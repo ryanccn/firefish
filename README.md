@@ -2,7 +2,7 @@
 
 This is my personal fork of [Firefish](https://joinfirefish.org/).
 
-Sources are cloned directly from the upstream [GitLab repository](https://gitlab.prometheus.systems/firefish/firefish)'s `main` (stable) branch and have patches from the `patches` folder applied.
+Sources are cloned directly from the upstream [GitLab repository](https://git.joinfirefish.org/firefish/firefish)'s `main` (stable) branch and have patches from the `patches` folder applied.
 
 The revision is pinned in `rev.txt` and automatically updated by GitHub Actions.
 
@@ -14,4 +14,4 @@ To use the repository directly, clone this repository and run `./scripts/gen_sou
 
 ## Patches
 
-- [Use standard system font stack](/patches/0001-system_fonts.patch)
+- [Use IBM Plex Sans for default font](/patches/0001-ibm-plex-sans.patch)
