@@ -22,7 +22,7 @@ git init
 git config user.name "github-actions[bot]"
 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-git remote add origin "https://git.joinfirefish.org/firefish/firefish.git"
+git remote add origin "https://firefish.dev/firefish/firefish.git"
 git fetch origin "$rev" --depth 1
 git reset --hard FETCH_HEAD
 

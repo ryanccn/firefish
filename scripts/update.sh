@@ -15,7 +15,7 @@ old_rev="$(cat rev.txt)"
 
 echo "${log_prefix}Fetching ${ansi_cyan}latest revision${ansi_reset} from GitLab API..."
 
-commit_data="$(curl -fsSL "https://git.joinfirefish.org/api/v4/projects/7/repository/commits?ref_name=main" | jq '.[0]')"
+commit_data="$(curl -fsSL "https://firefish.dev/api/v4/projects/7/repository/commits?ref_name=main" | jq '.[0]')"
 
 rev="$(printf '%s' "$commit_data" | jq -r '.id')"
 short_rev="$(printf '%s' "$commit_data" | jq -r '.short_id')"
@@ -32,7 +32,7 @@ else
 fi
 
 pr_title="feat: update Firefish to \`$short_rev\`"
-pr_body="Updates Firefish to [$message (\`$short_rev\`)](https://git.joinfirefish.org/firefish/firefish/-/commit/$rev)."
+pr_body="Updates Firefish to [$message (\`$short_rev\`)](https://firefish.dev/firefish/firefish/-/commit/$rev)."
 
 set_output pr_title "$pr_title"
 set_output pr_body "$pr_body"
