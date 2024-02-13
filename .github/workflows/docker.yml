@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@v8
+        uses: DeterminateSystems/nix-installer-action@main
 
       - name: Generate source
         run: ./scripts/gen_source.sh

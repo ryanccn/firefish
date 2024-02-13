@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Generate source
+        run: ./scripts/gen_source.sh
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: src
+
+      - name: Build
+        run: pnpm run build
+        working-directory: src
