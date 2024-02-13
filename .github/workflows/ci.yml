@@ -16,6 +16,9 @@ jobs:
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@main
 
+      - name: Generate source
+        run: ./scripts/gen_source.sh
+
       - name: Install pnpm
         uses: pnpm/action-setup@v3
         with:
@@ -26,9 +29,7 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
-
-      - name: Generate source
-        run: ./scripts/gen_source.sh
+          cache-dependency-path: src/pnpm-lock.yaml
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
