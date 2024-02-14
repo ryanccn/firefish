@@ -1,18 +1,18 @@
-From ccbfad4ba5a592a76b6d938e7b207442e35c27e0 Mon Sep 17 00:00:00 2001
+From 6b8ea7241d1b4e8301062301996da6632d5943fe Mon Sep 17 00:00:00 2001
 From: "github-actions[bot]"
  <41898282+github-actions[bot]@users.noreply.github.com>
-Date: Wed, 14 Feb 2024 11:11:36 +0800
+Date: Wed, 14 Feb 2024 11:32:39 +0800
 Subject: [PATCH] apply patch 0003-deeplx.patch
 
 ---
- .../server/api/endpoints/notes/translate.ts   | 36 ++++++++++++++++---
- 1 file changed, 32 insertions(+), 4 deletions(-)
+ .../server/api/endpoints/notes/translate.ts   | 38 +++++++++++++++++--
+ 1 file changed, 34 insertions(+), 4 deletions(-)
 
 diff --git a/packages/backend/src/server/api/endpoints/notes/translate.ts b/packages/backend/src/server/api/endpoints/notes/translate.ts
-index d1de399..0909bb8 100644
+index d1de399..9430563 100644
 --- a/packages/backend/src/server/api/endpoints/notes/translate.ts
 +++ b/packages/backend/src/server/api/endpoints/notes/translate.ts
-@@ -58,14 +58,42 @@ export default define(meta, paramDef, async (ps, user) => {
+@@ -58,14 +58,44 @@ export default define(meta, paramDef, async (ps, user) => {
  
  	const instance = await fetchMeta();
  
@@ -27,6 +27,7 @@ index d1de399..0909bb8 100644
 +	if (instance.deeplAuthKey == null && instance.libreTranslateApiUrl == null) {
 +		try {
 +			const resp = await fetch("http://deeplx:1188/translate", {
++				method: "POST",
 +				body: JSON.stringify({
 +					text: note.text,
 +					target_lang: targetLang,
@@ -51,7 +52,8 @@ index d1de399..0909bb8 100644
 +				sourceLang: data.source_lang,
 +				text: convertChinese(ps.targetLang === "zh-TW", data.data),
 +			};
-+		} catch {
++		} catch (error) {
++			console.error(error);
 +			return 204;
 +		}
 +	}
