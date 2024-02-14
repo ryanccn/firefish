@@ -1,0 +1,64 @@
+From ccbfad4ba5a592a76b6d938e7b207442e35c27e0 Mon Sep 17 00:00:00 2001
+From: "github-actions[bot]"
+ <41898282+github-actions[bot]@users.noreply.github.com>
+Date: Wed, 14 Feb 2024 11:11:36 +0800
+Subject: [PATCH] apply patch 0003-deeplx.patch
+
+---
+ .../server/api/endpoints/notes/translate.ts   | 36 ++++++++++++++++---
+ 1 file changed, 32 insertions(+), 4 deletions(-)
+
+diff --git a/packages/backend/src/server/api/endpoints/notes/translate.ts b/packages/backend/src/server/api/endpoints/notes/translate.ts
+index d1de399..0909bb8 100644
+--- a/packages/backend/src/server/api/endpoints/notes/translate.ts
++++ b/packages/backend/src/server/api/endpoints/notes/translate.ts
+@@ -58,14 +58,42 @@ export default define(meta, paramDef, async (ps, user) => {
+ 
+ 	const instance = await fetchMeta();
+ 
+-	if (instance.deeplAuthKey == null && instance.libreTranslateApiUrl == null) {
+-		return 204; // TODO: 良い感じのエラー返す
+-	}
+-
+ 	let targetLang = ps.targetLang;
+ 	if (targetLang.includes("-")) targetLang = targetLang.split("-")[0];
+ 	if (targetLang.includes("_")) targetLang = targetLang.split("_")[0];
+ 
++	if (instance.deeplAuthKey == null && instance.libreTranslateApiUrl == null) {
++		try {
++			const resp = await fetch("http://deeplx:1188/translate", {
++				body: JSON.stringify({
++					text: note.text,
++					target_lang: targetLang,
++				}),
++				headers: {
++					"content-type": "application/json; charset=utf-8",
++				},
++				agent: getAgentByUrl,
++			});
++
++			const data = (await resp.json()) as {
++				alternatives: string[];
++				code: number;
++				data: string;
++				id: number;
++				method: string;
++				source_lang: string;
++				target_lang: string;
++			};
++
++			return {
++				sourceLang: data.source_lang,
++				text: convertChinese(ps.targetLang === "zh-TW", data.data),
++			};
++		} catch {
++			return 204;
++		}
++	}
++
+ 	if (instance.libreTranslateApiUrl != null) {
+ 		const jsonBody = {
+ 			q: note.text,
+-- 
+2.43.0
+
