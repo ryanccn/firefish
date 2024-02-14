@@ -1,0 +1,46 @@
+From 369eda1a25c4df6e7f56dfa4abd354c23e681f13 Mon Sep 17 00:00:00 2001
+From: "github-actions[bot]"
+ <41898282+github-actions[bot]@users.noreply.github.com>
+Date: Wed, 14 Feb 2024 10:27:46 +0800
+Subject: [PATCH] prune devDependencies in docker image properly
+
+---
+ Dockerfile | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/Dockerfile b/Dockerfile
+index cc92d3a..511454d 100644
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -27,7 +27,7 @@ COPY packages/backend-rs/npm/linux-x64-musl/package.json packages/backend-rs/npm
+ COPY packages/backend-rs/npm/linux-arm64-musl/package.json packages/backend-rs/npm/linux-arm64-musl/package.json
+ 
+ # Configure pnpm, and install dev mode dependencies for compilation
+-RUN corepack enable && corepack prepare pnpm@latest --activate && pnpm i --frozen-lockfile
++RUN corepack enable && corepack prepare pnpm@latest --activate && pnpm install --frozen-lockfile
+ 
+ # Copy in the rest of the rust files
+ COPY packages/backend-rs packages/backend-rs/
+@@ -40,7 +40,7 @@ COPY . ./
+ RUN env NODE_ENV=production sh -c "pnpm run --filter '!backend-rs' build && pnpm run gulp"
+ 
+ # Trim down the dependencies to only those for production
+-RUN pnpm i --prod --frozen-lockfile
++RUN find . -path '*/node_modules/*' -delete && pnpm install --prod --frozen-lockfile
+ 
+ ## Runtime container
+ FROM docker.io/node:20-slim
+@@ -59,8 +59,8 @@ COPY --from=build /firefish/packages/megalodon /firefish/packages/megalodon
+ # Copy node modules
+ COPY --from=build /firefish/node_modules /firefish/node_modules
+ COPY --from=build /firefish/packages/backend/node_modules /firefish/packages/backend/node_modules
+-COPY --from=build /firefish/packages/sw/node_modules /firefish/packages/sw/node_modules
+-COPY --from=build /firefish/packages/client/node_modules /firefish/packages/client/node_modules
++# COPY --from=build /firefish/packages/sw/node_modules /firefish/packages/sw/node_modules
++# COPY --from=build /firefish/packages/client/node_modules /firefish/packages/client/node_modules
+ COPY --from=build /firefish/packages/firefish-js/node_modules /firefish/packages/firefish-js/node_modules
+ 
+ # Copy the finished compiled files
+-- 
+2.43.0
+
