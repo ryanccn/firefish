@@ -1,15 +1,15 @@
-From 9b084d508b13128b37028b07f838121134b0349b Mon Sep 17 00:00:00 2001
+From 9d8e81af8fbdeabde74f5e12d386912f38f352ac Mon Sep 17 00:00:00 2001
 From: "github-actions[bot]"
  <41898282+github-actions[bot]@users.noreply.github.com>
-Date: Tue, 13 Feb 2024 09:26:45 +0800
-Subject: [PATCH] apply patch 0001-ibm-plex-sans.patch
+Date: Fri, 16 Feb 2024 09:00:45 +0800
+Subject: [PATCH 1/2] apply patch 0001-ibm-plex-sans.patch
 
 ---
  packages/backend/src/server/web/index.ts      |  2 +-
- packages/backend/src/server/web/style.css     | 12 +-----
- .../backend/src/server/web/views/base.pug     |  3 ++
- packages/client/src/style.scss                | 41 ++-----------------
- 4 files changed, 8 insertions(+), 50 deletions(-)
+ packages/backend/src/server/web/style.css     | 12 +---
+ .../backend/src/server/web/views/base.pug     |  3 +
+ packages/client/src/style.scss                | 67 ++++++++-----------
+ 4 files changed, 32 insertions(+), 52 deletions(-)
 
 diff --git a/packages/backend/src/server/web/index.ts b/packages/backend/src/server/web/index.ts
 index ab3c293..078ee82 100644
@@ -50,7 +50,7 @@ index 2a93253..c524ab0 100644
 +	font-family: system-ui, sans-serif;
  }
 diff --git a/packages/backend/src/server/web/views/base.pug b/packages/backend/src/server/web/views/base.pug
-index 8036e10..d749917 100644
+index f751d2f..3ff8ca9 100644
 --- a/packages/backend/src/server/web/views/base.pug
 +++ b/packages/backend/src/server/web/views/base.pug
 @@ -42,6 +42,9 @@ html
@@ -64,10 +64,10 @@ index 8036e10..d749917 100644
  			each href in clientEntry.css
  				link(rel='stylesheet' href=`/assets/${href}`)
 diff --git a/packages/client/src/style.scss b/packages/client/src/style.scss
-index 8d677f7..deb405c 100644
+index 8d677f7..bf0a205 100644
 --- a/packages/client/src/style.scss
 +++ b/packages/client/src/style.scss
-@@ -25,42 +25,7 @@
+@@ -25,43 +25,6 @@
  	//--ad: rgb(255 169 0 / 10%);
  }
  
@@ -107,25 +107,51 @@ index 8d677f7..deb405c 100644
 -	src: url("/static-assets/fonts/atkinson-hyperlegible-v11-latin_latin-ext-700italic.woff2")
 -		format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 -}
-+
- 
+-
  ::selection {
  	color: #fff;
-@@ -76,7 +41,7 @@ html {
+ 	background-color: var(--accent);
+@@ -76,7 +39,18 @@ html {
  	accent-color: var(--accent);
  	overflow: auto;
  	overflow-wrap: break-word;
 -	font-family: "Atkinson Hyperlegible", Roboto, HelveticaNeue, Arial,
-+	font-family: "IBM Plex Sans", Roboto, HelveticaNeue, Arial,
++	font-family:
++		"IBM Plex Sans",
++		system-ui,
++		-apple-system,
++		BlinkMacSystemFont,
++		"Segoe UI",
++		Roboto,
++		Oxygen,
++		Ubuntu,
++		Cantarell,
++		"Open Sans",
++		"Helvetica Neue",
  		sans-serif;
  	font-size: 14px;
  	line-height: 1.6;
-@@ -89,7 +54,7 @@ html {
+@@ -88,8 +62,21 @@ html {
+ 	-webkit-text-size-adjust: none;
  
  	&.useCJKFont {
- 		font-family: "Hiragino Maru Gothic Pro", "BIZ UDGothic",
+-		font-family: "Hiragino Maru Gothic Pro", "BIZ UDGothic",
 -			"Atkinson Hyperlegible", Roboto, HelveticaNeue, Arial, sans-serif;
-+			"IBM Plex Sans", Roboto, HelveticaNeue, Arial, sans-serif;
++		font-family:
++			"Hiragino Maru Gothic Pro",
++			"BIZ UDGothic",
++			"IBM Plex Sans",
++			system-ui,
++			-apple-system,
++			BlinkMacSystemFont,
++			"Segoe UI",
++			Roboto,
++			Oxygen,
++			Ubuntu,
++			Cantarell,
++			"Open Sans",
++			"Helvetica Neue",
++			sans-serif;
  	}
  
  	&.useSystemFont {
