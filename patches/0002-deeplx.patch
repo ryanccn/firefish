@@ -1,36 +1,43 @@
-From 6b8ea7241d1b4e8301062301996da6632d5943fe Mon Sep 17 00:00:00 2001
+From 7268044ef3eec3699bec2aa4aad7fd0e6a3f4d3b Mon Sep 17 00:00:00 2001
 From: "github-actions[bot]"
  <41898282+github-actions[bot]@users.noreply.github.com>
-Date: Wed, 14 Feb 2024 11:32:39 +0800
-Subject: [PATCH] apply patch 0003-deeplx.patch
+Date: Tue, 26 Mar 2024 09:48:20 +0800
+Subject: [PATCH] feat: add deeplx support
 
 ---
- .../server/api/endpoints/notes/translate.ts   | 38 +++++++++++++++++--
- 1 file changed, 34 insertions(+), 4 deletions(-)
+ packages/backend/src/misc/translate.ts | 46 ++++++++++++++++++++++----
+ 1 file changed, 40 insertions(+), 6 deletions(-)
 
-diff --git a/packages/backend/src/server/api/endpoints/notes/translate.ts b/packages/backend/src/server/api/endpoints/notes/translate.ts
-index d1de399..9430563 100644
---- a/packages/backend/src/server/api/endpoints/notes/translate.ts
-+++ b/packages/backend/src/server/api/endpoints/notes/translate.ts
-@@ -58,14 +58,44 @@ export default define(meta, paramDef, async (ps, user) => {
- 
+diff --git a/packages/backend/src/misc/translate.ts b/packages/backend/src/misc/translate.ts
+index 8592d63..4f6ac9c 100644
+--- a/packages/backend/src/misc/translate.ts
++++ b/packages/backend/src/misc/translate.ts
+@@ -21,17 +21,51 @@ function stem(lang: PostLanguage): string {
+ export async function translate(
+ 	text: string,
+ 	from: PostLanguage | null,
+-	to: PostLanguage,
++	to: PostLanguage
+ ) {
  	const instance = await fetchMeta();
  
 -	if (instance.deeplAuthKey == null && instance.libreTranslateApiUrl == null) {
--		return 204; // TODO: 良い感じのエラー返す
+-		throw Error("No translator is set up on this server.");
 -	}
--
- 	let targetLang = ps.targetLang;
- 	if (targetLang.includes("-")) targetLang = targetLang.split("-")[0];
- 	if (targetLang.includes("_")) targetLang = targetLang.split("_")[0];
++	// if (instance.deeplAuthKey == null && instance.libreTranslateApiUrl == null) {
++	// 	throw Error("No translator is set up on this server.");
++	// }
+ 
+ 	const source = from == null ? null : stem(from);
+ 	const target = stem(to);
  
 +	if (instance.deeplAuthKey == null && instance.libreTranslateApiUrl == null) {
 +		try {
 +			const resp = await fetch("http://deeplx:1188/translate", {
 +				method: "POST",
 +				body: JSON.stringify({
-+					text: note.text,
-+					target_lang: targetLang,
++					text,
++					target_lang: target,
 +				}),
 +				headers: {
 +					"content-type": "application/json; charset=utf-8",
@@ -50,17 +57,35 @@ index d1de399..9430563 100644
 +
 +			return {
 +				sourceLang: data.source_lang,
-+				text: convertChinese(ps.targetLang === "zh-TW", data.data),
++				text: convertChinese(target === "zh-TW", data.data),
 +			};
 +		} catch (error) {
 +			console.error(error);
-+			return 204;
++			throw Error("No translator is set up on this server.");
 +		}
 +	}
 +
  	if (instance.libreTranslateApiUrl != null) {
  		const jsonBody = {
- 			q: note.text,
+ 			q: text,
+@@ -69,7 +103,7 @@ export async function translate(
+ 			sourceLang: source ?? json.detectedLanguage?.language,
+ 			text: convertChinese(
+ 				["zh-hant", "zh-TW"].includes(to),
+-				json.translatedText,
++				json.translatedText
+ 			),
+ 		};
+ 	}
+@@ -78,7 +112,7 @@ export async function translate(
+ 	const result = await deeplTranslator.translateText(
+ 		text,
+ 		source as deepl.SourceLanguageCode | null,
+-		(target === "en" ? to : target) as deepl.TargetLanguageCode,
++		(target === "en" ? to : target) as deepl.TargetLanguageCode
+ 	);
+ 
+ 	return {
 -- 
-2.43.0
+2.44.0
 
