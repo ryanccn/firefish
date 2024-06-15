@@ -1,7 +1,7 @@
-From 7268044ef3eec3699bec2aa4aad7fd0e6a3f4d3b Mon Sep 17 00:00:00 2001
+From 0683565ce838ad714a1cacd94da74b83636f4e08 Mon Sep 17 00:00:00 2001
 From: "github-actions[bot]"
  <41898282+github-actions[bot]@users.noreply.github.com>
-Date: Tue, 26 Mar 2024 09:48:20 +0800
+Date: Sat, 15 Jun 2024 10:41:33 +0800
 Subject: [PATCH] feat: add deeplx support
 
 ---
@@ -9,10 +9,10 @@ Subject: [PATCH] feat: add deeplx support
  1 file changed, 40 insertions(+), 6 deletions(-)
 
 diff --git a/packages/backend/src/misc/translate.ts b/packages/backend/src/misc/translate.ts
-index 8592d63..4f6ac9c 100644
+index d1bcd5e..8e03459 100644
 --- a/packages/backend/src/misc/translate.ts
 +++ b/packages/backend/src/misc/translate.ts
-@@ -21,17 +21,51 @@ function stem(lang: PostLanguage): string {
+@@ -24,17 +24,51 @@ function stem(lang: PostLanguage): string {
  export async function translate(
  	text: string,
  	from: PostLanguage | null,
@@ -68,7 +68,7 @@ index 8592d63..4f6ac9c 100644
  	if (instance.libreTranslateApiUrl != null) {
  		const jsonBody = {
  			q: text,
-@@ -69,7 +103,7 @@ export async function translate(
+@@ -72,7 +106,7 @@ export async function translate(
  			sourceLang: source ?? json.detectedLanguage?.language,
  			text: convertChinese(
  				["zh-hant", "zh-TW"].includes(to),
@@ -77,15 +77,15 @@ index 8592d63..4f6ac9c 100644
  			),
  		};
  	}
-@@ -78,7 +112,7 @@ export async function translate(
- 	const result = await deeplTranslator.translateText(
- 		text,
+@@ -83,7 +117,7 @@ export async function translate(
  		source as deepl.SourceLanguageCode | null,
+ 		// DeepL API requires us to specify "en-US" or "en-GB" for English
+ 		// translations ("en" does not work), so we need to address it
 -		(target === "en" ? to : target) as deepl.TargetLanguageCode,
 +		(target === "en" ? to : target) as deepl.TargetLanguageCode
  	);
  
  	return {
 -- 
-2.44.0
+2.44.1
 

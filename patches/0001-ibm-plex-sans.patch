@@ -1,31 +1,168 @@
-From 9d8e81af8fbdeabde74f5e12d386912f38f352ac Mon Sep 17 00:00:00 2001
+From 31772e0face62bf4830ac4ba4d6cee6568a2081f Mon Sep 17 00:00:00 2001
 From: "github-actions[bot]"
  <41898282+github-actions[bot]@users.noreply.github.com>
-Date: Fri, 16 Feb 2024 09:00:45 +0800
-Subject: [PATCH 1/2] apply patch 0001-ibm-plex-sans.patch
+Date: Sat, 15 Jun 2024 10:38:29 +0800
+Subject: [PATCH] feat: use IBM Plex Sans
 
 ---
- packages/backend/src/server/web/index.ts      |  2 +-
- packages/backend/src/server/web/style.css     | 12 +---
- .../backend/src/server/web/views/base.pug     |  3 +
- packages/client/src/style.scss                | 67 ++++++++-----------
- 4 files changed, 32 insertions(+), 52 deletions(-)
+ packages/backend/src/server/web/index.ts      | 34 +++++++--------
+ packages/backend/src/server/web/style.css     | 12 +-----
+ .../backend/src/server/web/views/base.pug     |  3 ++
+ packages/client/src/style.scss                | 43 +------------------
+ 4 files changed, 23 insertions(+), 69 deletions(-)
 
 diff --git a/packages/backend/src/server/web/index.ts b/packages/backend/src/server/web/index.ts
-index ab3c293..078ee82 100644
+index af6e237be..2763b1dcd 100644
 --- a/packages/backend/src/server/web/index.ts
 +++ b/packages/backend/src/server/web/index.ts
-@@ -499,7 +499,7 @@ router.get("/notes/:note", async (ctx, next) => {
+@@ -91,8 +91,8 @@ app.use(serverAdapter.registerPlugin());
+ const clientEntry = JSON.parse(
+ 	readFileSync(
+ 		`${_dirname}/../../../../../built/_client_dist_/manifest.json`,
+-		"utf-8",
+-	),
++		"utf-8"
++	)
+ )["src/init.ts"];
+ 
+ // Init renderer
+@@ -104,7 +104,7 @@ app.use(
+ 			clientEntry,
+ 			config,
+ 		},
+-	}),
++	})
+ );
+ 
+ // Serve favicon
+@@ -140,7 +140,7 @@ router.get<{ Params: { path: string } }>("/emoji/:path(.*)", async (ctx) => {
+ 
+ 	ctx.set(
+ 		"Content-Security-Policy",
+-		"default-src 'none'; style-src 'unsafe-inline'",
++		"default-src 'none'; style-src 'unsafe-inline'"
+ 	);
+ 
+ 	if (emoji == null) {
+@@ -149,7 +149,7 @@ router.get<{ Params: { path: string } }>("/emoji/:path(.*)", async (ctx) => {
+ 	}
+ 
+ 	const url = new URL(
+-		`${config.mediaProxy || `${config.url}/proxy`}/emoji.webp`,
++		`${config.mediaProxy || `${config.url}/proxy`}/emoji.webp`
+ 	);
+ 	// || emoji.originalUrl してるのは後方互換性のため
+ 	url.searchParams.append("url", emoji.publicUrl || emoji.originalUrl);
+@@ -224,7 +224,7 @@ router.get("/twemoji/(.*)", async (ctx) => {
+ 
+ 	ctx.set(
+ 		"Content-Security-Policy",
+-		"default-src 'none'; style-src 'unsafe-inline'",
++		"default-src 'none'; style-src 'unsafe-inline'"
+ 	);
+ 
+ 	await send(ctx as any, path, {
+@@ -332,7 +332,7 @@ const getFeed = async (
+ 	historyCount: string,
+ 	noteInTitle: string,
+ 	noRenotes: string,
+-	noReplies: string,
++	noReplies: string
+ ) => {
+ 	const meta = await fetchMeta();
+ 	if (meta.privateMode) {
+@@ -365,7 +365,7 @@ const getFeed = async (
+ 			history,
+ 			noteInTitle !== undefined,
+ 			noRenotes === undefined,
+-			noReplies === undefined,
++			noReplies === undefined
+ 		))
+ 	);
+ };
+@@ -414,7 +414,7 @@ const atomFeed: Router.Middleware = async (ctx) => {
+ 		ctx.query.history,
+ 		ctx.query.noteintitle,
+ 		ctx.query.norenotes,
+-		ctx.query.noreplies,
++		ctx.query.noreplies
+ 	);
+ 
+ 	if (feed) {
+@@ -433,7 +433,7 @@ const rssFeed: Router.Middleware = async (ctx) => {
+ 		ctx.query.history,
+ 		ctx.query.noteintitle,
+ 		ctx.query.norenotes,
+-		ctx.query.noreplies,
++		ctx.query.noreplies
+ 	);
+ 
+ 	if (feed) {
+@@ -452,7 +452,7 @@ const jsonFeed: Router.Middleware = async (ctx) => {
+ 		ctx.query.history,
+ 		ctx.query.noteintitle,
+ 		ctx.query.norenotes,
+-		ctx.query.noreplies,
++		ctx.query.noreplies
+ 	);
+ 
+ 	if (feed) {
+@@ -537,7 +537,7 @@ router.get("/notes/:note", async (ctx, next) => {
+ 				note: packedNote,
+ 				profile,
+ 				avatarUrl: await Users.getAvatarUrl(
+-					await Users.findOneByOrFail({ id: note.userId }),
++					await Users.findOneByOrFail({ id: note.userId })
+ 				),
+ 				// TODO: Let locale changeable by instance setting
+ 				summary: getNoteSummary(note.fileIds, note.text, note.cw, note.hasPoll),
+@@ -546,7 +546,7 @@ router.get("/notes/:note", async (ctx, next) => {
  			ctx.set("Cache-Control", "public, max-age=15");
  			ctx.set(
  				"Content-Security-Policy",
--				"default-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src *; font-src 'self' data:; img-src *; media-src *; worker-src 'self'; frame-ancestors *",
+-				"default-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src *; font-src 'self' data:; img-src * data:; media-src *; worker-src 'self'; frame-ancestors *",
 +				"default-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src 'self'; style-src 'self' 'unsafe-inline' fonts.bunny.net; font-src 'self' fonts.bunny.net data:; img-src *; media-src *; worker-src 'self'; frame-ancestors *",
  			);
  
  			return;
+@@ -571,7 +571,7 @@ router.get("/posts/:note", async (ctx, next) => {
+ 			note: packedNote,
+ 			profile,
+ 			avatarUrl: await Users.getAvatarUrl(
+-				await Users.findOneByOrFail({ id: note.userId }),
++				await Users.findOneByOrFail({ id: note.userId })
+ 			),
+ 			// TODO: Let locale changeable by instance setting
+ 			summary: getNoteSummary(note.fileIds, note.text, note.cw, note.hasPoll),
+@@ -609,7 +609,7 @@ router.get("/@:user/pages/:page", async (ctx, next) => {
+ 			page: _page,
+ 			profile,
+ 			avatarUrl: await Users.getAvatarUrl(
+-				await Users.findOneByOrFail({ id: page.userId }),
++				await Users.findOneByOrFail({ id: page.userId })
+ 			),
+ 		});
+ 
+@@ -641,7 +641,7 @@ router.get("/clips/:clip", async (ctx, next) => {
+ 			clip: _clip,
+ 			profile,
+ 			avatarUrl: await Users.getAvatarUrl(
+-				await Users.findOneByOrFail({ id: clip.userId }),
++				await Users.findOneByOrFail({ id: clip.userId })
+ 			),
+ 		});
+ 
+@@ -666,7 +666,7 @@ router.get("/gallery/:post", async (ctx, next) => {
+ 			post: _post,
+ 			profile,
+ 			avatarUrl: await Users.getAvatarUrl(
+-				await Users.findOneByOrFail({ id: post.userId }),
++				await Users.findOneByOrFail({ id: post.userId })
+ 			),
+ 		});
+ 
 diff --git a/packages/backend/src/server/web/style.css b/packages/backend/src/server/web/style.css
-index 2a93253..c524ab0 100644
+index 2a9325399..c524ab0b3 100644
 --- a/packages/backend/src/server/web/style.css
 +++ b/packages/backend/src/server/web/style.css
 @@ -1,13 +1,3 @@
@@ -50,10 +187,10 @@ index 2a93253..c524ab0 100644
 +	font-family: system-ui, sans-serif;
  }
 diff --git a/packages/backend/src/server/web/views/base.pug b/packages/backend/src/server/web/views/base.pug
-index f751d2f..3ff8ca9 100644
+index 100e92137..7bc3d4f68 100644
 --- a/packages/backend/src/server/web/views/base.pug
 +++ b/packages/backend/src/server/web/views/base.pug
-@@ -42,6 +42,9 @@ html
+@@ -30,6 +30,9 @@ html
  		link(rel='stylesheet' href=`/static-assets/instance.css?${ timestamp }`)
  		link(rel='modulepreload' href=`/assets/${clientEntry.file}`)
  
@@ -64,7 +201,7 @@ index f751d2f..3ff8ca9 100644
  			each href in clientEntry.css
  				link(rel='stylesheet' href=`/assets/${href}`)
 diff --git a/packages/client/src/style.scss b/packages/client/src/style.scss
-index 8d677f7..bf0a205 100644
+index b671cecf7..0da18a6fe 100644
 --- a/packages/client/src/style.scss
 +++ b/packages/client/src/style.scss
 @@ -25,43 +25,6 @@
@@ -111,50 +248,26 @@ index 8d677f7..bf0a205 100644
  ::selection {
  	color: #fff;
  	background-color: var(--accent);
-@@ -76,7 +39,18 @@ html {
+@@ -76,8 +39,7 @@ html {
  	accent-color: var(--accent);
  	overflow: auto;
  	overflow-wrap: break-word;
 -	font-family: "Atkinson Hyperlegible", Roboto, HelveticaNeue, Arial,
-+	font-family:
-+		"IBM Plex Sans",
-+		system-ui,
-+		-apple-system,
-+		BlinkMacSystemFont,
-+		"Segoe UI",
-+		Roboto,
-+		Oxygen,
-+		Ubuntu,
-+		Cantarell,
-+		"Open Sans",
-+		"Helvetica Neue",
- 		sans-serif;
+-		sans-serif;
++	font-family: "IBM Plex Sans", system-ui, -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif;
  	font-size: 14px;
  	line-height: 1.6;
-@@ -88,8 +62,21 @@ html {
+ 	text-size-adjust: 100%;
+@@ -89,8 +51,7 @@ html {
  	-webkit-text-size-adjust: none;
  
  	&.useCJKFont {
 -		font-family: "Hiragino Maru Gothic Pro", "BIZ UDGothic",
 -			"Atkinson Hyperlegible", Roboto, HelveticaNeue, Arial, sans-serif;
-+		font-family:
-+			"Hiragino Maru Gothic Pro",
-+			"BIZ UDGothic",
-+			"IBM Plex Sans",
-+			system-ui,
-+			-apple-system,
-+			BlinkMacSystemFont,
-+			"Segoe UI",
-+			Roboto,
-+			Oxygen,
-+			Ubuntu,
-+			Cantarell,
-+			"Open Sans",
-+			"Helvetica Neue",
-+			sans-serif;
++		font-family: "Hiragino Maru Gothic Pro", "IBM Plex Sans", system-ui, -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif;
  	}
  
  	&.useSystemFont {
 -- 
-2.43.0
+2.44.1
 
